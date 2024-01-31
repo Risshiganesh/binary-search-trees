@@ -1,4 +1,4 @@
-console.log("Hello");
+// console.log("Hello");
 
 // This is basically a linked list with two nextNodes.
 
@@ -28,22 +28,38 @@ function balancedBinarySearchTree(unsortedArray) {
   }
 
   function splitArray(arr) {
-    if (arr.length === 1) {
-      return arr;
+    if (arr.length === 0) {
+      // console.log("TEST");
+      return null;
     }
-    const leftArr = arr.slice(0, arr.length / 2);
 
-    console.log(leftArr);
+    const midPoint = Math.ceil(arr.length / 2) - 1;
 
-    // const middleElement = [arr[Math.floor(arr.length / 2)]];
+    const leftEnd = Math.floor(arr.length / 2);
 
-    // console.log(middleElement);
+    const rightStart = Math.floor(arr.length / 2) + 1;
 
-    // const rightArr = arr.slice(arr.length / 2 + 1, arr.length);
+    const leftArr = arr.slice(0, leftEnd);
 
-    const rightArr = arr.slice(arr.length / 2, arr.length);
+    const middleElement = [arr[Math.floor(arr.length / 2)]];
 
-    console.log(rightArr);
+    const rightArr = arr.slice(rightStart, arr.length);
+
+    console.log("SPLIT");
+    console.log(arr);
+    console.log("Mid: " + midPoint);
+    console.log("LeftEnd: " + leftEnd);
+    console.log("RightStart: " + rightStart);
+
+    const newTree = node();
+
+    newTree.data = middleElement;
+
+    newTree.left = splitArray(leftArr);
+
+    newTree.right = splitArray(rightArr);
+
+    return newTree;
   }
 
   return tree(unsortedArray);
@@ -51,7 +67,24 @@ function balancedBinarySearchTree(unsortedArray) {
 
 // balancedBinarySearchTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 
-balancedBinarySearchTree([1, 2, 3]);
+// console.log(balancedBinarySearchTree([1, 2, 3, 4]));
+
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return;
+  }
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  }
+};
+
+// prettyPrint(balancedBinarySearchTree([1, 2, 3, 4]));
+
+prettyPrint(balancedBinarySearchTree([1, 2, 3, 4, 5, 6, 7]));
 
 //
 //
