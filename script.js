@@ -33,7 +33,7 @@ function balancedBinarySearchTree(unsortedArray) {
       return null;
     }
 
-    const midPoint = Math.ceil(arr.length / 2) - 1;
+    const midPoint = Math.floor(arr.length / 2);
 
     const leftEnd = Math.floor(arr.length / 2);
 
@@ -41,7 +41,7 @@ function balancedBinarySearchTree(unsortedArray) {
 
     const leftArr = arr.slice(0, leftEnd);
 
-    const middleElement = [arr[Math.floor(arr.length / 2)]];
+    const middleElement = [arr[midPoint]];
 
     const rightArr = arr.slice(rightStart, arr.length);
 
@@ -84,7 +84,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // prettyPrint(balancedBinarySearchTree([1, 2, 3, 4]));
 
-prettyPrint(balancedBinarySearchTree([1, 2, 3, 4, 5, 6, 7]));
+prettyPrint(balancedBinarySearchTree([1, 2, 3, 4, 5, 6, 7, 8, 9]));
 
 //
 //
