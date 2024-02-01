@@ -57,13 +57,18 @@ function balancedBinarySearchTree(unsortedArray) {
 
   // 4.
   function insert(value) {
-    temp = rootNode;
+    let temp = rootNode;
 
     while (temp) {
       // console.log(temp.data);
 
+      if (temp.data === value) {
+        console.log("Node already exists");
+        return;
+      }
+
       if (value < temp.data) {
-        console.log("LEFT");
+        // console.log("LEFT");
         if (!temp.left) {
           temp.left = node(value, null, null);
           return;
@@ -73,9 +78,9 @@ function balancedBinarySearchTree(unsortedArray) {
       }
 
       if (value > temp.data) {
-        console.log("RIGHT");
+        // console.log("RIGHT");
         if (!temp.right) {
-          console.log("WUT");
+          // console.log("WUT");
           temp.right = node(value, null, null);
           return;
         }
@@ -85,8 +90,9 @@ function balancedBinarySearchTree(unsortedArray) {
     }
   }
 
+  // 4.
   function deleteNode(value) {
-    temp = rootNode;
+    let temp = rootNode;
 
     let prevNode = null;
 
@@ -112,11 +118,11 @@ function balancedBinarySearchTree(unsortedArray) {
 
         continue;
       }
+    }
 
-      if (!temp) {
-        console.log("Node not found.");
-        return;
-      }
+    if (!temp) {
+      console.log("Node not found.");
+      return;
     }
 
     deleteOperation(prevNode, direction, temp);
@@ -125,12 +131,48 @@ function balancedBinarySearchTree(unsortedArray) {
   }
 
   function deleteOperation(prevNode, direction, selectedNode) {
-    console.log("TEST");
+    // console.log("TEST");
+    let replacementNode = selectedNode;
+    let rnParent = null;
+    let dir = null;
+
     if (!selectedNode.left && !selectedNode.right) {
       prevNode[direction] = null;
+      return;
+    }
+
+    if (selectedNode.left && selectedNode.right) {
+      rnParent = replacementNode;
+      // move right once
+      dir = "right";
+      replacementNode = selectedNode.right;
+
+      // check if left nodes exists loop if yes
+      while (replacementNode.left) {
+        rnParent = replacementNode;
+        dir = "left";
+        replacementNode = replacementNode.left;
+      }
+      selectedNode.data = replacementNode.data;
+      rnParent[dir] = replacementNode.right;
+
+      return;
+    }
+
+    if (selectedNode.left || selectedNode.right) {
+      if (selectedNode.left) {
+        prevNode[direction] = selectedNode.left;
+        return;
+      }
+
+      if (selectedNode.right) {
+        prevNode[direction] = selectedNode.right;
+        return;
+      }
     }
   }
 
+  // 5.
   function find(value) {
     temp = rootNode;
 
@@ -150,6 +192,10 @@ function balancedBinarySearchTree(unsortedArray) {
 
         continue;
       }
+    }
+
+    if (!temp) {
+      console.log("Node not found");
     }
 
     return temp;
@@ -186,17 +232,46 @@ const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 6, 7, 8, 9]);
 
 // newTree.insert(5);
 
+newTree.insert(7);
+
 // newTree.insert(50);
 
 // console.log(newTree.deleteNode(6));
 
 // console.log(newTree.deleteNode(3));
 
+// console.log(newTree.deleteNode(11));
+
 // console.log(newTree.deleteNode(1));
 
 // console.log(newTree.deleteNode(9));
 
+newTree.insert(6);
+
+newTree.insert(6);
+
+newTree.insert(11);
+
+// newTree.insert(5);
+
+newTree.deleteNode(8);
+
+newTree.insert(7.5);
+
+newTree.insert(7.6);
+
+// newTree.insert(7.4);
+
+// newTree.deleteNode();
+
+newTree.deleteNode(7);
+
+// newTree.deleteNode(8);
+
+// newTree.deleteNode(11);
 // console.log(newTree.deleteNode(2));
+
+console.log(newTree.find(9));
 
 prettyPrint(newTree.rootNode);
 
