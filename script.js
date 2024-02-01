@@ -1,5 +1,7 @@
 // console.log("Hello");
 
+// If you know how to mess around with js objects, this will not be an issue for you.
+
 // This is basically a linked list with two nextNodes.
 
 // Data has to be sorted. No duplicates.
@@ -7,6 +9,9 @@
 // Sort first before creating BST.
 
 function balancedBinarySearchTree(unsortedArray) {
+  const rootNode = tree(unsortedArray);
+
+  // 1.
   function node(data, left, right) {
     return {
       data,
@@ -15,54 +20,147 @@ function balancedBinarySearchTree(unsortedArray) {
     };
   }
 
+  // 2.
   function tree(arrayToBeSorted) {
     const root = buildTree(arrayToBeSorted);
 
     return root;
   }
 
+  // 3.
   function buildTree(array) {
     const sortedArray = mergeSort(array);
 
-    return splitArray(sortedArray);
+    return createBST(sortedArray);
   }
 
-  function splitArray(arr) {
-    if (arr.length === 0) {
-      // console.log("TEST");
+  // 3.
+  function createBST(arr, start = 0, end = arr.length - 1) {
+    if (start > end) {
       return null;
     }
 
-    const midPoint = Math.floor(arr.length / 2);
+    const midPoint = Math.floor((start + end) / 2);
 
-    const leftEnd = Math.floor(arr.length / 2);
+    const middleElement = arr[midPoint];
 
-    const rightStart = Math.floor(arr.length / 2) + 1;
+    const newRoot = node();
 
-    const leftArr = arr.slice(0, leftEnd);
+    newRoot.data = middleElement;
 
-    const middleElement = [arr[midPoint]];
+    newRoot.left = createBST(arr, start, midPoint - 1);
 
-    const rightArr = arr.slice(rightStart, arr.length);
+    newRoot.right = createBST(arr, midPoint + 1, end);
 
-    console.log("SPLIT");
-    console.log(arr);
-    console.log("Mid: " + midPoint);
-    console.log("LeftEnd: " + leftEnd);
-    console.log("RightStart: " + rightStart);
-
-    const newTree = node();
-
-    newTree.data = middleElement;
-
-    newTree.left = splitArray(leftArr);
-
-    newTree.right = splitArray(rightArr);
-
-    return newTree;
+    return newRoot;
   }
 
-  return tree(unsortedArray);
+  // 4.
+  function insert(value) {
+    temp = rootNode;
+
+    while (temp) {
+      // console.log(temp.data);
+
+      if (value < temp.data) {
+        console.log("LEFT");
+        if (!temp.left) {
+          temp.left = node(value, null, null);
+          return;
+        }
+        temp = temp.left;
+        continue;
+      }
+
+      if (value > temp.data) {
+        console.log("RIGHT");
+        if (!temp.right) {
+          console.log("WUT");
+          temp.right = node(value, null, null);
+          return;
+        }
+        temp = temp.right;
+        continue;
+      }
+    }
+  }
+
+  function deleteNode(value) {
+    temp = rootNode;
+
+    let prevNode = null;
+
+    let direction = null;
+
+    while (temp) {
+      if (temp.data === value) {
+        break;
+      }
+
+      if (value < temp.data) {
+        prevNode = temp;
+        direction = "left";
+        temp = temp.left;
+
+        continue;
+      }
+
+      if (value > temp.data) {
+        prevNode = temp;
+        direction = "right";
+        temp = temp.right;
+
+        continue;
+      }
+
+      if (!temp) {
+        console.log("Node not found.");
+        return;
+      }
+    }
+
+    deleteOperation(prevNode, direction, temp);
+
+    return;
+  }
+
+  function deleteOperation(prevNode, direction, selectedNode) {
+    console.log("TEST");
+    if (!selectedNode.left && !selectedNode.right) {
+      prevNode[direction] = null;
+    }
+  }
+
+  function find(value) {
+    temp = rootNode;
+
+    while (temp) {
+      if (temp.data === value) {
+        break;
+      }
+
+      if (value < temp.data) {
+        temp = temp.left;
+
+        continue;
+      }
+
+      if (value > temp.data) {
+        temp = temp.right;
+
+        continue;
+      }
+    }
+
+    return temp;
+  }
+
+  return {
+    rootNode,
+    insert,
+    deleteNode,
+    find,
+  };
 }
 
 // balancedBinarySearchTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
@@ -84,7 +182,23 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // prettyPrint(balancedBinarySearchTree([1, 2, 3, 4]));
 
-prettyPrint(balancedBinarySearchTree([1, 2, 3, 4, 5, 6, 7, 8, 9]));
+const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 6, 7, 8, 9]);
+
+// newTree.insert(5);
+
+// newTree.insert(50);
+
+// console.log(newTree.deleteNode(6));
+
+// console.log(newTree.deleteNode(3));
+
+// console.log(newTree.deleteNode(1));
+
+// console.log(newTree.deleteNode(9));
+
+// console.log(newTree.deleteNode(2));
+
+prettyPrint(newTree.rootNode);
 
 //
 //
