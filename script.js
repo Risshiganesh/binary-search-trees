@@ -201,11 +201,63 @@ function balancedBinarySearchTree(unsortedArray) {
     return temp;
   }
 
+  // 6.
+  function levelOrder(callback) {
+    const root = rootNode;
+    let queue = [root];
+    let index = 0;
+
+    while (queue[index]) {
+      callback(queue[index]);
+      if (queue[index].left) {
+        queue.push(queue[index].left);
+      }
+      if (queue[index].right) {
+        queue.push(queue[index].right);
+      }
+      index++;
+    }
+  }
+
+  // 7.
+  function inOrder(callback, root = rootNode) {
+    if (!root) {
+      return;
+    }
+    inOrder(callback, root.left);
+    callback(root);
+    inOrder(callback, root.right);
+  }
+
+  // 7.
+  function preOrder(callback, root = rootNode) {
+    if (!root) {
+      return;
+    }
+    callback(root);
+    inOrder(callback, root.left);
+    inOrder(callback, root.right);
+  }
+
+  // 7.
+  function postOrder(callback, root = rootNode) {
+    if (!root) {
+      return;
+    }
+    inOrder(callback, root.left);
+    inOrder(callback, root.right);
+    callback(root);
+  }
+
   return {
     rootNode,
     insert,
     deleteNode,
     find,
+    levelOrder,
+    inOrder,
+    preOrder,
+    postOrder,
   };
 }
 
@@ -228,11 +280,11 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // prettyPrint(balancedBinarySearchTree([1, 2, 3, 4]));
 
-const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 6, 7, 8, 9]);
+const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 5, 6, 7, 8, 9]);
 
 // newTree.insert(5);
 
-newTree.insert(7);
+// newTree.insert(7);
 
 // newTree.insert(50);
 
@@ -246,32 +298,40 @@ newTree.insert(7);
 
 // console.log(newTree.deleteNode(9));
 
-newTree.insert(6);
+// newTree.insert(6);
 
-newTree.insert(6);
+// newTree.insert(6);
 
-newTree.insert(11);
+// newTree.insert(11);
 
 // newTree.insert(5);
 
-newTree.deleteNode(8);
+// newTree.deleteNode(8);
 
-newTree.insert(7.5);
+// newTree.insert(7.5);
 
-newTree.insert(7.6);
+// newTree.insert(7.6);
 
 // newTree.insert(7.4);
 
 // newTree.deleteNode();
 
-newTree.deleteNode(7);
+// newTree.deleteNode(7);
 
 // newTree.deleteNode(8);
 
 // newTree.deleteNode(11);
 // console.log(newTree.deleteNode(2));
 
-console.log(newTree.find(9));
+// console.log(newTree.find(9));
+
+// newTree.levelOrder(demo);
+
+newTree.inOrder(demo);
+
+function demo(val) {
+  console.log(val.data);
+}
 
 prettyPrint(newTree.rootNode);
 
