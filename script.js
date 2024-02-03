@@ -235,8 +235,8 @@ function balancedBinarySearchTree(unsortedArray) {
       return;
     }
     callback(root);
-    inOrder(callback, root.left);
-    inOrder(callback, root.right);
+    preOrder(callback, root.left);
+    preOrder(callback, root.right);
   }
 
   // 7.
@@ -244,10 +244,89 @@ function balancedBinarySearchTree(unsortedArray) {
     if (!root) {
       return;
     }
-    inOrder(callback, root.left);
-    inOrder(callback, root.right);
+    postOrder(callback, root.left);
+    postOrder(callback, root.right);
     callback(root);
   }
+
+  // 8.
+  function height(node){
+    const getNode = find(node);
+
+    let count = 0
+
+    function countEdge(root, edge = -1) {
+      if (!root) {
+
+        // console.log("WUD:"+i)
+        if (edge > count) {
+          count = edge
+        }
+        
+        return;
+      }
+
+      console.log(root)
+
+    // console.log(i)
+
+      edge++
+
+      // console.log(i)
+      // console.log("WUT")
+      countEdge(root.left, edge);
+      countEdge(root.right, edge);
+      // callback(root);
+      
+    }
+
+    countEdge(getNode)
+
+    return count
+
+  }
+
+// 9.
+  function depth(node){
+    // const getNode = find(node);
+
+    let count = 0;
+
+    let found  = false;
+
+    function countEdge(root, edge = -1) {
+
+      // console.log(root)
+      // console.log("DAMMIT");
+      if(found){
+        return;
+      }
+
+      if (!root) {
+        return
+      }
+      edge++
+
+      if (root.data === node) {
+        count = edge;
+        console.log(root.data +" count is "+ count);
+        found = true;
+        return;
+      }
+
+      countEdge(root.left, edge);
+      countEdge(root.right, edge);
+
+      
+    }
+
+    countEdge(rootNode)
+
+    return count
+  }
+
+
+
 
   return {
     rootNode,
@@ -258,6 +337,8 @@ function balancedBinarySearchTree(unsortedArray) {
     inOrder,
     preOrder,
     postOrder,
+    height,
+    depth,
   };
 }
 
@@ -308,9 +389,13 @@ const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 5, 6, 7, 8, 9]);
 
 // newTree.deleteNode(8);
 
-// newTree.insert(7.5);
+newTree.insert(7.5);
 
-// newTree.insert(7.6);
+newTree.insert(7.6);
+
+newTree.insert(7.8);
+
+newTree.insert(7.9);
 
 // newTree.insert(7.4);
 
@@ -327,10 +412,21 @@ const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 5, 6, 7, 8, 9]);
 
 // newTree.levelOrder(demo);
 
-newTree.inOrder(demo);
+// newTree.inOrder(demo);
 
-function demo(val) {
-  console.log(val.data);
+// newTree.height(8);
+
+
+// console.log(newTree.height(5));
+
+console.log(newTree.depth(6))
+
+function demo(val, count = 0) {
+  console.log("DATA VALUE: "+val.data);
+  // count++
+  // return count
+  // console.log("Count total: "+ count);
+  // return count
 }
 
 prettyPrint(newTree.rootNode);
@@ -339,7 +435,7 @@ prettyPrint(newTree.rootNode);
 //
 //
 // console.log(mergeSort([3, -1, 4, 1, -5, 9, 2, -6, 5, 3, -5]));
-console.log(mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]));
+// console.log(mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]));
 // console.log(mergeSort([5, 7, 1, 15, 9, 2, 14, 8, 7, 3, 3]));
 
 function mergeSort(array) {
