@@ -296,13 +296,10 @@ function balancedBinarySearchTree(unsortedArray) {
 
     function countEdge(root, edge = -1) {
 
-      // console.log(root)
+      console.log(root)
       // console.log("DAMMIT");
-      if(found){
-        return;
-      }
 
-      if (!root) {
+      if (!root || found) {
         return
       }
       edge++
@@ -325,6 +322,14 @@ function balancedBinarySearchTree(unsortedArray) {
     return count
   }
 
+  function isBalanced(){
+    // everytime you hit null on both node.left and node.right
+    // or null, try either one, add total count value to array,
+    // then compare the lowest value in that array with the highest 
+    // value in that array, if more than 1, the return false, 
+    // if equal to or less than 1, return true.
+  }
+
 
 
 
@@ -339,6 +344,7 @@ function balancedBinarySearchTree(unsortedArray) {
     postOrder,
     height,
     depth,
+    isBalanced,
   };
 }
 
@@ -419,7 +425,7 @@ newTree.insert(7.9);
 
 // console.log(newTree.height(5));
 
-console.log(newTree.depth(6))
+console.log(newTree.depth(1))
 
 function demo(val, count = 0) {
   console.log("DATA VALUE: "+val.data);
