@@ -1,15 +1,5 @@
-// console.log("Hello");
-
-// If you know how to mess around with js objects, this will not be an issue for you.
-
-// This is basically a linked list with two nextNodes.
-
-// Data has to be sorted. No duplicates.
-
-// Sort first before creating BST.
-
 function balancedBinarySearchTree(unsortedArray) {
-  const rootNode = tree(unsortedArray);
+  let rootNode = tree(unsortedArray);
 
   // 1.
   function node(data, left, right) {
@@ -60,15 +50,12 @@ function balancedBinarySearchTree(unsortedArray) {
     let temp = rootNode;
 
     while (temp) {
-      // console.log(temp.data);
-
       if (temp.data === value) {
         console.log("Node already exists");
         return;
       }
 
       if (value < temp.data) {
-        // console.log("LEFT");
         if (!temp.left) {
           temp.left = node(value, null, null);
           return;
@@ -78,9 +65,7 @@ function balancedBinarySearchTree(unsortedArray) {
       }
 
       if (value > temp.data) {
-        // console.log("RIGHT");
         if (!temp.right) {
-          // console.log("WUT");
           temp.right = node(value, null, null);
           return;
         }
@@ -131,7 +116,6 @@ function balancedBinarySearchTree(unsortedArray) {
   }
 
   function deleteOperation(prevNode, direction, selectedNode) {
-    // console.log("TEST");
     let replacementNode = selectedNode;
     let rnParent = null;
     let dir = null;
@@ -207,8 +191,28 @@ function balancedBinarySearchTree(unsortedArray) {
     let queue = [root];
     let index = 0;
 
-    while (queue[index]) {
+    // iteration
+    function iteration(queue, callback) {
+      while (queue[index]) {
+        callback(queue[index]);
+        if (queue[index].left) {
+          queue.push(queue[index].left);
+        }
+        if (queue[index].right) {
+          queue.push(queue[index].right);
+        }
+        index++;
+      }
+    }
+
+    // iteration(queue, callback);
+
+    function recursion(queue, callback) {
+      if (!queue[index]) {
+        return;
+      }
       callback(queue[index]);
+
       if (queue[index].left) {
         queue.push(queue[index].left);
       }
@@ -216,7 +220,11 @@ function balancedBinarySearchTree(unsortedArray) {
         queue.push(queue[index].right);
       }
       index++;
+
+      recursion(queue, callback);
     }
+
+    recursion(queue, callback);
   }
 
   // 7.
@@ -250,94 +258,121 @@ function balancedBinarySearchTree(unsortedArray) {
   }
 
   // 8.
-  function height(node){
+  function height(node) {
     const getNode = find(node);
-
-    let count = 0
-
-    function countEdge(root, edge = -1) {
-      if (!root) {
-
-        // console.log("WUD:"+i)
-        if (edge > count) {
-          count = edge
-        }
-        
-        return;
-      }
-
-      console.log(root)
-
-    // console.log(i)
-
-      edge++
-
-      // console.log(i)
-      // console.log("WUT")
-      countEdge(root.left, edge);
-      countEdge(root.right, edge);
-      // callback(root);
-      
-    }
-
-    countEdge(getNode)
-
-    return count
-
-  }
-
-// 9.
-  function depth(node){
-    // const getNode = find(node);
 
     let count = 0;
 
-    let found  = false;
+    function countEdge(root, edge = -1) {
+      if (!root) {
+        if (edge > count) {
+          count = edge;
+        }
+
+        return;
+      }
+
+      console.log(root);
+
+      edge++;
+      countEdge(root.left, edge);
+      countEdge(root.right, edge);
+    }
+
+    countEdge(getNode);
+
+    return count;
+  }
+
+  // 9.
+  function depth(node) {
+    let count = 0;
+
+    let found = false;
 
     function countEdge(root, edge = -1) {
-
-      console.log(root)
-      // console.log("DAMMIT");
+      console.log(root);
 
       if (!root || found) {
-        return
+        return;
       }
-      edge++
+      edge++;
 
       if (root.data === node) {
         count = edge;
-        console.log(root.data +" count is "+ count);
+        console.log(root.data + " count is " + count);
         found = true;
         return;
       }
 
       countEdge(root.left, edge);
       countEdge(root.right, edge);
-
-      
     }
 
-    countEdge(rootNode)
+    countEdge(rootNode);
 
-    return count
+    return count;
   }
 
-  function isBalanced(){
-    // everytime you hit null on both node.left and node.right
-    // or null, try either one, add total count value to array,
-    // then compare the lowest value in that array with the highest 
-    // value in that array, if more than 1, the return false, 
-    // if equal to or less than 1, return true.
+  function isBalanced() {
+    const countArray = [];
+
+    function countEdge(root, edge = -1) {
+      if (!root) {
+        return;
+      }
+
+      edge++;
+
+      if (!root.left && !root.right) {
+        countArray.push(edge);
+      }
+
+      countEdge(root.left, edge);
+      countEdge(root.right, edge);
+    }
+
+    countEdge(rootNode);
+
+    const sortedCount = countArray.sort();
+
+    console.log(sortedCount);
+
+    const difference = sortedCount[sortedCount.length - 1] - sortedCount[0];
+
+    if (difference > 1) {
+      return false;
+    }
+
+    if (difference <= 1) {
+      return true;
+    }
+
+    return difference;
   }
 
+  function rebalance() {
+    const newArray = [];
 
-  // Also you have not completed levelOrder iteration
+    temp = rootNode;
 
+    inOrder(function (temp) {
+      newArray.push(temp.data);
+    }, temp);
 
+    rootNode = tree(newArray);
 
+    console.log("rebalanced");
+
+    return;
+  }
+
+  function getRoot() {
+    return rootNode;
+  }
 
   return {
-    rootNode,
+    getRoot,
     insert,
     deleteNode,
     find,
@@ -348,12 +383,9 @@ function balancedBinarySearchTree(unsortedArray) {
     height,
     depth,
     isBalanced,
+    rebalance,
   };
 }
-
-// balancedBinarySearchTree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-
-// console.log(balancedBinarySearchTree([1, 2, 3, 4]));
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
@@ -367,8 +399,6 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-
-// prettyPrint(balancedBinarySearchTree([1, 2, 3, 4]));
 
 const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 5, 6, 7, 8, 9]);
 
@@ -406,7 +436,7 @@ newTree.insert(7.8);
 
 newTree.insert(7.9);
 
-// newTree.insert(7.4);
+newTree.insert(7.4);
 
 // newTree.deleteNode();
 
@@ -419,33 +449,29 @@ newTree.insert(7.9);
 
 // console.log(newTree.find(9));
 
-// newTree.levelOrder(demo);
+newTree.levelOrder(demo);
 
 // newTree.inOrder(demo);
 
 // newTree.height(8);
 
-
 // console.log(newTree.height(5));
 
-console.log(newTree.depth(1))
+// console.log(newTree.depth(1));
 
-function demo(val, count = 0) {
-  console.log("DATA VALUE: "+val.data);
-  // count++
-  // return count
-  // console.log("Count total: "+ count);
-  // return count
+newTree.rebalance();
+
+function demo(val) {
+  console.log("DATA VALUE: " + val.data);
 }
 
-prettyPrint(newTree.rootNode);
+console.log(newTree.isBalanced());
+
+prettyPrint(newTree.getRoot());
 
 //
 //
 //
-// console.log(mergeSort([3, -1, 4, 1, -5, 9, 2, -6, 5, 3, -5]));
-// console.log(mergeSort([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]));
-// console.log(mergeSort([5, 7, 1, 15, 9, 2, 14, 8, 7, 3, 3]));
 
 function mergeSort(array) {
   if (array.length === 0) {
