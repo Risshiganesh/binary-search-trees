@@ -334,11 +334,15 @@ function balancedBinarySearchTree(unsortedArray) {
 
     countEdge(rootNode);
 
-    const sortedCount = countArray.sort();
+    const sortedCount = countArray.sort(function (a, b) {
+      return a - b;
+    });
 
     console.log(sortedCount);
 
     const difference = sortedCount[sortedCount.length - 1] - sortedCount[0];
+
+    // console.log(difference);
 
     if (difference > 1) {
       return false;
@@ -402,77 +406,91 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 const newTree = balancedBinarySearchTree([1, 2, 3, 4, 4, 5, 6, 7, 8, 9]);
 
-// newTree.insert(5);
-
-// newTree.insert(7);
-
-// newTree.insert(50);
-
-// console.log(newTree.deleteNode(6));
-
-// console.log(newTree.deleteNode(3));
-
-// console.log(newTree.deleteNode(11));
-
-// console.log(newTree.deleteNode(1));
-
-// console.log(newTree.deleteNode(9));
-
-// newTree.insert(6);
-
-// newTree.insert(6);
-
-// newTree.insert(11);
-
-// newTree.insert(5);
-
-// newTree.deleteNode(8);
-
-newTree.insert(7.5);
-
-newTree.insert(7.6);
-
-newTree.insert(7.8);
-
-newTree.insert(7.9);
-
-newTree.insert(7.4);
-
-// newTree.deleteNode();
-
-// newTree.deleteNode(7);
-
-// newTree.deleteNode(8);
-
-// newTree.deleteNode(11);
-// console.log(newTree.deleteNode(2));
-
-// console.log(newTree.find(9));
-
-newTree.levelOrder(demo);
-
-// newTree.inOrder(demo);
-
-// newTree.height(8);
-
-// console.log(newTree.height(5));
-
-// console.log(newTree.depth(1));
-
-newTree.rebalance();
-
-function demo(val) {
+function printElements(val) {
   console.log("DATA VALUE: " + val.data);
 }
 
-console.log(newTree.isBalanced());
+function driverScript() {
+  // 1.
+  function createRandomNumbers(num) {
+    const randomNumArray = [];
+    let number = num + 1;
+    while (!(randomNumArray.length === 100)) {
+      randomNumArray.push(Math.floor(Math.random() * number));
+    }
 
-prettyPrint(newTree.getRoot());
+    console.log();
+    return randomNumArray;
+  }
+
+  function insertArrayNums(tree, array) {
+    array.forEach((num) => {
+      tree.insert(num);
+    });
+  }
+
+  return {
+    createRandomNumbers,
+    insertArrayNums,
+  };
+}
+
+const DS = driverScript();
+
+const BST = balancedBinarySearchTree(DS.createRandomNumbers(100));
+// 2.
+// console.log(BST.isBalanced());
+
+// 3.
+// BST.preOrder(printElements);
+
+// BST.postOrder(printElements);
+
+// BST.inOrder(printElements);
+
+// 4.
+DS.insertArrayNums(BST, DS.createRandomNumbers(200));
+
+// 5.
+console.log(BST.isBalanced());
+// 6.
+BST.rebalance();
+// 7.
+console.log(BST.isBalanced());
+// 8.
+// BST.preOrder(printElements);
+// BST.postOrder(printElements);
+BST.inOrder(printElements);
+prettyPrint(BST.getRoot());
 
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 function mergeSort(array) {
   if (array.length === 0) {
     return console.log("Array is empty");
